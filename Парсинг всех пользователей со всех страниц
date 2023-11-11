@@ -1,0 +1,83 @@
+using HtmlAgilityPack;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mail;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace Parsing
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private async void gunaButton1_Click(object sender, EventArgs e)
+        {
+
+            HtmlWeb hl = new HtmlWeb();
+            string sylca = "https://freelance.habr.com/freelancers?categories=development_all_inclusive%2Cdevelopment_backend%2Cdevelopment_frontend%2Cdevelopment_prototyping%2Cdevelopment_ios%2Cdevelopment_android%2Cdevelopment_desktop%2Cdevelopment_bots%2Cdevelopment_games%2Cdevelopment_1c_dev%2Cdevelopment_scripts%2Cdevelopment_voice_interfaces%2Cdevelopment_other";
+            for (int i = 1; i < 2000; i++)
+            {
+                HtmlAgilityPack.HtmlDocument doc = hl.Load($"{sylca}&page={i}");
+                var node = doc.DocumentNode.SelectNodes("//div[@class='main-content']/ul/li//article[@class='user user_short']//div[@class='user__info']//header[@class='user-data']");
+                for (int j = 0; j < node.Count; j++)
+                {
+                    await Task.Delay(500);  
+                    textBox1.Text += node[j].InnerText + Environment.NewLine;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //HtmlWeb hl = new HtmlWeb();
+                //HtmlAgilityPack.HtmlDocument doc = hl.Load($"https://freelance.habr.com/freelancers?categories=development_all_inclusive%2Cdevelopment_backend%2Cdevelopment_frontend%2Cdevelopment_prototyping%2Cdevelopment_ios%2Cdevelopment_android%2Cdevelopment_desktop%2Cdevelopment_bots%2Cdevelopment_games%2Cdevelopment_1c_dev%2Cdevelopment_scripts%2Cdevelopment_voice_interfaces%2Cdevelopment_other");
+                //foreach (HtmlNode html in doc.DocumentNode.SelectNodes("//div[@class='main-content']"))
+                //{
+                //    foreach (HtmlNode node in html.SelectNodes("ul"))
+                //    {
+                //        foreach (HtmlNode htmlNode in node.SelectNodes("li"))
+                //        {
+
+                //            foreach (HtmlNode name1 in htmlNode.SelectNodes("//article[@class='user user_short']//div[@class='user__info']//header[@class='user-data']"))
+                //            {   
+                //                await Task.Delay(500);
+                //                    textBox1.Text += name1.InnerText + Environment.NewLine;
+                //            }
+                //        }
+                //    }
+                //}
+            
+    }
+}
+
