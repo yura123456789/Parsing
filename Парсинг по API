@@ -1,0 +1,62 @@
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Парсинг
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        public class TheperatureInfo
+        {
+            public float Temp { get; set; }
+            public float temp_min { get; set; }
+            public float temp_max { get; set; }
+        }
+        public class Wetherresponse
+        {
+            public TheperatureInfo Main { get; set; }
+            public string Name { get; set; }
+        }
+
+
+
+
+        private void gunaButton1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string strana = Convert.ToString(textBox1.Text);
+                string url = $"https://api.openweathermap.org/data/2.5/weather?q={strana}&lang=ru&units=metric&appid=ea82c0bce4788001307cef5c170bc9e8";
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
+                HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                string response;
+                using (StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream()))
+                {
+                    response = streamReader.ReadToEnd();
+                }
+                Wetherresponse wetherresponse = JsonConvert.DeserializeObject<Wetherresponse>(response);
+                textBox2.Text = "Температура в " + wetherresponse.Name.ToString() + " " + wetherresponse.Main.Temp.ToString() + "C" + Environment.NewLine + "Минимальная температура"
+                    + wetherresponse.Main.temp_min.ToString() + "C" + Environment.NewLine + "Максимальная температура" + wetherresponse.Main.temp_max.ToString() + "C";
+            }
+            catch(Exception q)
+            {
+                MessageBox.Show("Нет такого города " + q.Message);
+            }
+            }
+    }
+}
